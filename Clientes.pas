@@ -31,7 +31,7 @@ implementation
 
 {$R *.dfm}
 
-uses dmdados;
+uses dmdados, Validador;
 
 procedure TFrmCliente.BtnBuscarClick(Sender: TObject);
 var
@@ -41,15 +41,22 @@ begin
   with QConsulta do begin
     Close;
     SQL.Clear;
-    SQL.Add('SELECT * FROM CLIENTES WHERE');
+    SQL.Add('SELECT * FROM CLIENTES');
     case RGBusca.ItemIndex of
       0: begin
-         SQL.Add('codigo = :xcodigo');
-         Acodigo := StrToInt(edBusca.Text);
-         ParamByName('xcodigo').AsInteger := ACodigo;
+         if Validador.ValidarNumero(edBusca.Text) then begin
+           SQL.Add('WHERE codigo = :xcodigo');
+           Acodigo := StrToInt(edBusca.Text);
+           ParamByName('xcodigo').AsInteger := ACodigo;
+        end else begin
+          ShowMessage('Permitido somente numero para código.');
+          edBusca.Text := '';
+          edBusca.SetFocus;
+          exit;
+        end;
       end;
       1: begin
-        SQL.Add('nome = :xparam');
+        SQL.Add('WHERE nome = :xparam');
         ParamByName('xparam').AsString := AnsiUpperCase(edBusca.Text);
       end;
 

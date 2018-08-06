@@ -5,7 +5,8 @@ uses
   Principal in 'Principal.pas' {Form1},
   Clientes in 'Clientes.pas' {FrmCliente},
   dmdados in 'dmdados.pas' {DataModule1: TDataModule},
-  Validador in 'Validador.pas';
+  Validador in 'Validador.pas',
+  ClienteDAO in 'ClienteDAO.pas';
 
 {$R *.res}
 

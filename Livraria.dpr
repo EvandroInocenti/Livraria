@@ -9,7 +9,8 @@ uses
   ClienteDAO in 'ClienteDAO.pas',
   model.Cliente in 'models\model.Cliente.pas',
   model.Livro in 'models\model.Livro.pas' {$R *.res},
-  Livro in 'Livro.pas' {FrmLivro};
+  Livro in 'Livro.pas' {FrmLivro},
+  Constantes in 'Constantes.pas';
 
 {$R *.res}
 

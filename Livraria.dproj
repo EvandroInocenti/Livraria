@@ -120,8 +120,8 @@
         </DCCReference>
         <DCCReference Include="Livro.pas">
             <Form>FrmLivro</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Constantes.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

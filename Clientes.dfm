@@ -11,6 +11,7 @@ object FrmCliente: TFrmCliente
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object DBGrid1: TDBGrid
@@ -72,6 +73,7 @@ object FrmCliente: TFrmCliente
       Top = 74
       Width = 121
       Height = 21
+      MaxLength = 100
       TabOrder = 1
     end
     object BtnBuscar: TButton
@@ -111,6 +113,7 @@ object FrmCliente: TFrmCliente
       Width = 74
       Height = 21
       TabStop = False
+      Enabled = False
       ReadOnly = True
       TabOrder = 0
     end
@@ -140,6 +143,16 @@ object FrmCliente: TFrmCliente
       TabOrder = 3
       Visible = False
     end
+    object btnLimpar: TButton
+      Left = 230
+      Top = 32
+      Width = 70
+      Height = 25
+      Caption = 'Limpar'
+      Enabled = False
+      TabOrder = 4
+      OnClick = btnLimparClick
+    end
   end
   object QConsulta: TIBQuery
     Database = DataModule1.IBDatabase1
@@ -161,7 +174,7 @@ object FrmCliente: TFrmCliente
     BufferChunks = 1000
     CachedUpdates = False
     ParamCheck = True
-    Left = 235
+    Left = 195
     Top = 330
   end
   object PopupMenu1: TPopupMenu

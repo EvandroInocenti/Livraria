@@ -84,6 +84,8 @@
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -99,14 +101,6 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Principal.pas">
-            <Form>Form1</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Clientes.pas">
-            <Form>FrmCliente</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="dmdados.pas">
             <Form>DataModule1</Form>
             <FormType>dfm</FormType>
@@ -118,10 +112,17 @@
         <DCCReference Include="models\model.Livro.pas">
             <Form>$R *.res</Form>
         </DCCReference>
-        <DCCReference Include="Livro.pas">
+        <DCCReference Include="config\Constantes.pas"/>
+        <DCCReference Include="src\telas\Clientes.pas">
+            <Form>FrmCliente</Form>
+        </DCCReference>
+        <DCCReference Include="src\telas\Livro.pas">
             <Form>FrmLivro</Form>
         </DCCReference>
-        <DCCReference Include="Constantes.pas"/>
+        <DCCReference Include="src\telas\Principal.pas">
+            <Form>FrmPrincipal</Form>
+        </DCCReference>
+        <None Include="ModelSupport_Livraria\default.txaPackage"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -142,11 +143,21 @@
                 <Source>
                     <Source Name="MainSource">Livraria.dpr</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp250.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
                 <DeployFile LocalName="Win32\Debug\Livraria.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Livraria.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_Livraria\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -570,6 +581,7 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>
+            <ModelSupport>False</ModelSupport>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>

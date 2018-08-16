@@ -37,8 +37,6 @@ type
   private
     procedure Limpar;
     procedure Consultar;
-  public
-    { Public declarations }
   end;
 
 var

@@ -1,5 +1,6 @@
 object DataModule1: TDataModule1
   OldCreateOrder = False
+  OnCreate = DataModuleCreate
   Height = 333
   Width = 510
   object IBDatabase1: TIBDatabase

@@ -8,7 +8,7 @@ uses
   Vcl.ExtCtrls;
 
 type
-  TForm1 = class(TForm)
+  TFrmPrincipal = class(TForm)
     MainMenu1: TMainMenu;
     Cadastros1: TMenuItem;
     Cliente: TMenuItem;
@@ -25,7 +25,7 @@ type
   end;
 
 var
-  Form1: TForm1;
+  frmPrincipal: TFrmPrincipal;
 
 implementation
 
@@ -33,7 +33,7 @@ implementation
 
 uses Clientes, Livro;
 
-procedure TForm1.ClienteClick(Sender: TObject);
+procedure TFrmPrincipal.ClienteClick(Sender: TObject);
 var
 ACliente : TFrmCliente;
 
@@ -41,30 +41,26 @@ begin
   ACliente := TFrmCliente.Create(Nil);
     try
     ACliente.ShowModal;
-
   finally
     FreeAndNil(ACliente);
   end;
 end;
 
-procedure TForm1.imgClienteClick(Sender: TObject);
+procedure TFrmPrincipal.imgClienteClick(Sender: TObject);
 var
-ACliente : TFrmCliente;
-
+  ACliente : TFrmCliente;
 begin
   ACliente := TFrmCliente.Create(Nil);
     try
     ACliente.ShowModal;
-
   finally
     FreeAndNil(ACliente);
   end;
 end;
 
-procedure TForm1.LivroClick(Sender: TObject);
+procedure TFrmPrincipal.LivroClick(Sender: TObject);
 var
-ALivro : TFrmLivro;
-
+  ALivro : TFrmLivro;
 begin
   ALivro := TFrmLivro.Create(Nil);
   try
@@ -73,5 +69,4 @@ begin
     FreeAndNil(ALivro);
   end;
 end;
-
 end.

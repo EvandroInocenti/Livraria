@@ -37,16 +37,16 @@ type
   private
     procedure Limpar;
     procedure Consultar;
-  public
-    { Public declarations }
+    procedure Cadastrar;
+    function ValidarNome: Boolean;
   end;
 
 var
   FrmCliente: TFrmCliente;
 
 const
-  CADASTRAR = 'Cadastrar';
-  ATUALIZAR = 'Atualizar';
+  CADASTRAR_BUTTON_CAPTION = 'Cadastrar';
+  ATUALIZAR_BUTTON_CAPTION = 'Atualizar';
 implementation
 
 {$R *.dfm}
@@ -74,24 +74,13 @@ end;
 procedure TFrmCliente.btnCadastrarClick(Sender: TObject);
 var
   AQuery : TIBQuery;
-  ACliente : TCliente;
 begin
-  if btnCadastrar.Caption = CADASTRAR then begin
-    if edNome.Text = EmptyStr then begin
-      ShowMessage('Informe um nome.');
-      edNome.SetFocus;
-      Exit;
-    end;
-    ACliente := TCliente.Create(edNome.Text);
-    TClienteDAO.CadastrarCliente(DataModule1.IBTransaction1, QCadastro, ACliente);
-    ACliente.Cadastrar;
-    Limpar;
-    Consultar;
-    Exit;
-  end;
+  if btnCadastrar.Caption = CADASTRAR_BUTTON_CAPTION then Cadastrar;
 
-  if btnCadastrar.Caption = ATUALIZAR then begin
-    Exit;
+  if btnCadastrar.Caption = ATUALIZAR_BUTTON_CAPTION then begin
+    if edNome.Text = EmptyStr then begin
+      Show
+    end;
   end;
 
   if eChave.Text = EmptyStr then begin
@@ -130,6 +119,19 @@ begin
   Limpar;
 end;
 
+procedure TFrmCliente.Cadastrar;
+var
+  ACliente : TCliente;
+begin
+  if ValidarNome then begin
+    ACliente := TCliente.Create(edNome.Text);
+    TClienteDAO.CadastrarCliente(DataModule1.IBTransaction1, QCadastro, ACliente);
+    ACliente.Cadastrar;
+    Limpar;
+    Consultar;
+  end;
+end;
+
 procedure TFrmCliente.Consultar;
 begin
   TClienteDAO.ConsultaClientes(DataModule1.IBDatabase1, QConsulta);
@@ -140,7 +142,7 @@ begin
   if (QConsulta.Active) and (not QConsulta.IsEmpty) then begin
     eChave.Text := QConsulta.FieldByName('chave').Text;
     edCodigo.Text := QConsulta.FieldByName('codigo').Text;
-    btnCadastrar.Caption := ATUALIZAR;
+    btnCadastrar.Caption := ATUALIZAR_BUTTON_CAPTION;
     edNome.Text := QConsulta.FieldByName('nome').Text;
     btnLimpar.Enabled := True;
   end;
@@ -168,8 +170,19 @@ procedure TFrmCliente.Limpar;
 begin
   edCodigo.Text := EmptyStr;
   edNome.Text := EmptyStr;
-  btnCadastrar.Caption := CADASTRAR;
+  btnCadastrar.Caption := CADASTRAR_BUTTON_CAPTION;
   btnLimpar.Enabled := false;
+end;
+
+function TFrmCliente.ValidarNome: Boolean;
+begin
+  if edNome.Text = EmptyStr then begin
+    ShowMessage('Informe um nome.');
+    edNome.SetFocus;
+    Result := False;
+    Exit;
+  end;
+  Result := True;
 end;
 
 end.

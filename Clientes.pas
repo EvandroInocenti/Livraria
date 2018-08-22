@@ -82,7 +82,7 @@ begin
       edNome.SetFocus;
       Exit;
     end;
-    ACliente := TCliente.Create(edNome.Text);
+    ACliente := TCliente.Create(edNome.Text, StrToInt(edCodigo.Text));
     TClienteDAO.CadastrarCliente(DataModule1.IBTransaction1, QCadastro, ACliente);
     ACliente.Cadastrar;
     Limpar;
@@ -91,37 +91,12 @@ begin
   end;
 
   if btnCadastrar.Caption = ATUALIZAR then begin
+     ACliente := TCliente.Create(edNome.Text, StrToInt(edCodigo.Text));
+     TClienteDAO.AtualizarCliente(DataModule1.IBTransaction1, QCadastro, ACliente);
+     ACliente.Atualizar;
+     Limpar;
+     Consultar;
     Exit;
-  end;
-
-  if eChave.Text = EmptyStr then begin
-    AQuery := TIBQuery.Create(nil);
-    try
-      With AQuery do begin
-        Close;
-        SQL.Clear;
-        Database := DataModule1.IBDatabase1;
-        sql.Add('select coalesce(max(codigo),0)+1 as maxCodigo from clientes');
-        Open;
-      end;
-
-      with QCadastro do begin
-        Close;
-        SQL.Clear;
-        SQL.Add('INSERT INTO CLIENTES(CODIGO, NOME)');
-        SQL.Add('VALUES(:xcodigo, :xnome)');
-        ParamByName('xcodigo').AsInteger := AQuery.FieldByName('maxCodigo').AsInteger;
-        ParamByName('xnome').AsString := AnsiUpperCase(edNome.Text);
-        ExecSQL;
-        DataModule1.IBTransaction1.CommitRetaining;
-      end;
-      edCodigo.Text := '';
-      edNome.Text := '';
-    finally
-      FreeAndNil(AQuery);
-    end;
-  end else begin
-
   end;
 end;
 
@@ -148,6 +123,9 @@ end;
 
 procedure TFrmCliente.excluir1Click(Sender: TObject);
 begin
+
+
+
   With QCadastro do begin
     Close;
     SQL.Clear;

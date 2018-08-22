@@ -11,15 +11,15 @@ Type
       FCodigo: Integer;
       FNome: String;
     protected
-      property Codigo: Integer read FCodigo write FCodigo;
+//      property Codigo: Integer read FCodigo write FCodigo;
     published
       property Nome: String read FNome write FNome;
-      property Chave: Integer read FChave write FChave;
+      property Codigo: Integer read FCodigo write FCodigo;
       ///<summary>Cadastra um cliente novo</summary>
       function Cadastrar: Boolean;
       ///<summary>Atualiza um cliente novo</summary>
       function Atualizar: Boolean;
-      constructor Create(_ANome: String);
+      constructor Create(_ANome: String; _ACodigo: Integer);
   End;
 
 implementation
@@ -40,9 +40,9 @@ begin
   // Cadastro
 end;
 
-constructor TCliente.Create(_ANome: String);
+constructor TCliente.Create(_ANome: String; _ACodigo: Integer);
 begin
   Nome := _ANome;
-//  Chave := _AChave;
+  Codigo := _ACodigo;
 end;
 end.

@@ -78,8 +78,8 @@ begin
     SQL.Add('SELECT * FROM CLIENTES');
     case _AIndice of
       0: begin
-           SQL.Add('WHERE codigo = :xcodigo');
-           ParamByName('xcodigo').AsInteger := StrToInt(_AStr);
+           SQL.Add('WHERE chave = :xchave');
+           ParamByName('xchave').AsInteger := StrToInt(_AStr);
       end;
       1: begin
         SQL.Add('WHERE nome like :xparam');
@@ -95,8 +95,9 @@ begin
   with _AQuery do begin
     Close;
     Sql.Clear;
-    Sql.Add('SELECT * FROM CLIENTES');
+    Sql.Add('SELECT FIRST 10 * FROM CLIENTES ORDER BY 1 DESC');
     Open;
+    First;
   end;
 end;
 end.

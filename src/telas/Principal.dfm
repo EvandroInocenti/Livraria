@@ -12,6 +12,7 @@ object FrmPrincipal: TFrmPrincipal
   Font.Style = []
   Menu = MainMenu1
   OldCreateOrder = False
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object imgCliente: TImage
@@ -134,6 +135,15 @@ object FrmPrincipal: TFrmPrincipal
       A65B4AAF41A6C41810C4802006047D07C8A3D06FE5A4E8E30000000049454E44
       AE426082}
     OnClick = LivroClick
+  end
+  object lblTemp: TLabel
+    Left = 0
+    Top = 286
+    Width = 635
+    Height = 13
+    Align = alBottom
+    Caption = 'Temperatura em Joa'#231'aba:  -- '#186'C'
+    ExplicitWidth = 155
   end
   object MainMenu1: TMainMenu
     Left = 8

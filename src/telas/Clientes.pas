@@ -19,14 +19,11 @@ type
     edBusca: TEdit;
     BtnBuscar: TButton;
     GroupBox2: TGroupBox;
-    edCodigo: TEdit;
-    lblCodigo: TLabel;
     edNome: TEdit;
     lblNome: TLabel;
     btnCadastrar: TButton;
     PopupMenu1: TPopupMenu;
     excluir1: TMenuItem;
-    eChave: TEdit;
     btnLimpar: TButton;
     procedure BtnBuscarClick(Sender: TObject);
     procedure btnCadastrarClick(Sender: TObject);
@@ -79,38 +76,8 @@ begin
 
   if btnCadastrar.Caption = ATUALIZAR_BUTTON_CAPTION then begin
     if edNome.Text = EmptyStr then begin
-      Show
+      Show;
     end;
-  end;
-
-  if eChave.Text = EmptyStr then begin
-    AQuery := TIBQuery.Create(nil);
-    try
-      With AQuery do begin
-        Close;
-        SQL.Clear;
-        Database := DataModule1.IBDatabase1;
-        sql.Add('select coalesce(max(codigo),0)+1 as maxCodigo from clientes');
-        Open;
-      end;
-
-      with QCadastro do begin
-        Close;
-        SQL.Clear;
-        SQL.Add('INSERT INTO CLIENTES(CODIGO, NOME)');
-        SQL.Add('VALUES(:xcodigo, :xnome)');
-        ParamByName('xcodigo').AsInteger := AQuery.FieldByName('maxCodigo').AsInteger;
-        ParamByName('xnome').AsString := AnsiUpperCase(edNome.Text);
-        ExecSQL;
-        DataModule1.IBTransaction1.CommitRetaining;
-      end;
-      edCodigo.Text := '';
-      edNome.Text := '';
-    finally
-      FreeAndNil(AQuery);
-    end;
-  end else begin
-
   end;
 end;
 
@@ -140,8 +107,7 @@ end;
 procedure TFrmCliente.DBGrid1DblClick(Sender: TObject);
 begin
   if (QConsulta.Active) and (not QConsulta.IsEmpty) then begin
-    eChave.Text := QConsulta.FieldByName('chave').Text;
-    edCodigo.Text := QConsulta.FieldByName('codigo').Text;
+    edNome.Tag := QConsulta.FieldByName('chave').AsInteger;
     btnCadastrar.Caption := ATUALIZAR_BUTTON_CAPTION;
     edNome.Text := QConsulta.FieldByName('nome').Text;
     btnLimpar.Enabled := True;
@@ -168,7 +134,6 @@ end;
 
 procedure TFrmCliente.Limpar;
 begin
-  edCodigo.Text := EmptyStr;
   edNome.Text := EmptyStr;
   btnCadastrar.Caption := CADASTRAR_BUTTON_CAPTION;
   btnLimpar.Enabled := false;

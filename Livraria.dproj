@@ -108,10 +108,6 @@
         </DCCReference>
         <DCCReference Include="Validador.pas"/>
         <DCCReference Include="ClienteDAO.pas"/>
-        <DCCReference Include="models\model.Cliente.pas"/>
-        <DCCReference Include="models\model.Livro.pas">
-            <Form>$R *.res</Form>
-        </DCCReference>
         <DCCReference Include="config\Constantes.pas"/>
         <DCCReference Include="src\telas\Clientes.pas">
             <Form>FrmCliente</Form>
@@ -121,7 +117,10 @@
         </DCCReference>
         <DCCReference Include="src\telas\Principal.pas">
             <Form>FrmPrincipal</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\models\model.Cliente.pas"/>
+        <DCCReference Include="src\models\model.Livro.pas"/>
         <None Include="ModelSupport_Livraria\default.txaPackage"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

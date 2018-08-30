@@ -31,8 +31,7 @@ object FrmCliente: TFrmCliente
     Columns = <
       item
         Expanded = False
-        FieldName = 'CODIGO'
-        Title.Caption = 'C'#211'DIGO'
+        FieldName = 'CHAVE'
         Visible = True
       end
       item
@@ -78,7 +77,7 @@ object FrmCliente: TFrmCliente
     end
     object BtnBuscar: TButton
       Left = 173
-      Top = 74
+      Top = 72
       Width = 75
       Height = 25
       Caption = 'Consultar'
@@ -93,13 +92,6 @@ object FrmCliente: TFrmCliente
     Height = 113
     Caption = 'Cadastro '
     TabOrder = 2
-    object lblCodigo: TLabel
-      Left = 15
-      Top = 28
-      Width = 37
-      Height = 13
-      Caption = 'Codigo:'
-    end
     object lblNome: TLabel
       Left = 15
       Top = 75
@@ -107,22 +99,12 @@ object FrmCliente: TFrmCliente
       Height = 13
       Caption = 'Nome: '
     end
-    object edCodigo: TEdit
-      Left = 55
-      Top = 25
-      Width = 74
-      Height = 21
-      TabStop = False
-      Enabled = False
-      ReadOnly = True
-      TabOrder = 0
-    end
     object edNome: TEdit
       Left = 55
       Top = 72
       Width = 150
       Height = 21
-      TabOrder = 1
+      TabOrder = 0
     end
     object btnCadastrar: TButton
       Left = 230
@@ -130,27 +112,17 @@ object FrmCliente: TFrmCliente
       Width = 70
       Height = 25
       Caption = 'Cadastrar'
-      TabOrder = 2
+      TabOrder = 1
       OnClick = btnCadastrarClick
-    end
-    object eChave: TEdit
-      Left = 79
-      Top = 16
-      Width = 25
-      Height = 21
-      TabStop = False
-      ReadOnly = True
-      TabOrder = 3
-      Visible = False
     end
     object btnLimpar: TButton
       Left = 230
-      Top = 32
+      Top = 16
       Width = 70
       Height = 25
       Caption = 'Limpar'
       Enabled = False
-      TabOrder = 4
+      TabOrder = 2
       OnClick = btnLimparClick
     end
   end

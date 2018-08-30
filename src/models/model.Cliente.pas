@@ -8,10 +8,7 @@ Type
   TCliente = Class
     private
       FChave: Integer;
-      FCodigo: Integer;
       FNome: String;
-    protected
-      property Codigo: Integer read FCodigo write FCodigo;
     published
       property Nome: String read FNome write FNome;
       property Chave: Integer read FChave write FChave;

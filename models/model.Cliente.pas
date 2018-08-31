@@ -19,7 +19,7 @@ Type
       function Cadastrar: Boolean;
       ///<summary>Atualiza um cliente novo</summary>
       function Atualizar: Boolean;
-      constructor Create(_ANome: String; _ACodigo: Integer);
+      constructor Create(_ANome: String);
   End;
 
 implementation
@@ -40,9 +40,8 @@ begin
   // Cadastro
 end;
 
-constructor TCliente.Create(_ANome: String; _ACodigo: Integer);
+constructor TCliente.Create(_ANome: String);
 begin
   Nome := _ANome;
-  Codigo := _ACodigo;
 end;
 end.

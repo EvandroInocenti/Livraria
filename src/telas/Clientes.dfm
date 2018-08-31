@@ -44,7 +44,7 @@ object FrmCliente: TFrmCliente
   object GroupBox1: TGroupBox
     Left = 8
     Top = 8
-    Width = 265
+    Width = 385
     Height = 114
     Caption = 'Consulta '
     TabOrder = 1
@@ -58,7 +58,7 @@ object FrmCliente: TFrmCliente
     object RGBusca: TRadioGroup
       Left = 11
       Top = 15
-      Width = 237
+      Width = 371
       Height = 54
       Caption = 'Busca por '#237'ndice'
       Columns = 3
@@ -71,87 +71,28 @@ object FrmCliente: TFrmCliente
     object edBusca: TEdit
       Left = 44
       Top = 74
-      Width = 121
+      Width = 181
       Height = 21
       MaxLength = 100
       TabOrder = 1
     end
     object BtnBuscar: TButton
-      Left = 173
-      Top = 74
+      Left = 231
+      Top = 72
       Width = 75
       Height = 25
       Caption = 'Consultar'
       TabOrder = 2
       OnClick = BtnBuscarClick
     end
-  end
-  object GroupBox2: TGroupBox
-    Left = 8
-    Top = 312
-    Width = 313
-    Height = 113
-    Caption = 'Cadastro '
-    TabOrder = 2
-    object lblCodigo: TLabel
-      Left = 15
-      Top = 28
-      Width = 37
-      Height = 13
-      Caption = 'Codigo:'
-    end
-    object lblNome: TLabel
-      Left = 15
-      Top = 75
-      Width = 34
-      Height = 13
-      Caption = 'Nome: '
-    end
-    object edCodigo: TEdit
-      Left = 55
-      Top = 25
-      Width = 74
-      Height = 21
-      TabStop = False
-      Enabled = False
-      ReadOnly = True
-      TabOrder = 0
-    end
-    object edNome: TEdit
-      Left = 55
+    object btnNovo: TButton
+      Left = 312
       Top = 72
-      Width = 150
-      Height = 21
-      TabOrder = 1
-    end
-    object btnCadastrar: TButton
-      Left = 230
-      Top = 70
       Width = 70
       Height = 25
-      Caption = 'Cadastrar'
-      TabOrder = 2
-      OnClick = btnCadastrarClick
-    end
-    object eChave: TEdit
-      Left = 79
-      Top = 16
-      Width = 25
-      Height = 21
-      TabStop = False
-      ReadOnly = True
+      Caption = 'Novo'
       TabOrder = 3
-      Visible = False
-    end
-    object btnLimpar: TButton
-      Left = 230
-      Top = 32
-      Width = 70
-      Height = 25
-      Caption = 'Limpar'
-      Enabled = False
-      TabOrder = 4
-      OnClick = btnLimparClick
+      OnClick = btnNovoClick
     end
   end
   object QConsulta: TIBQuery
@@ -168,18 +109,9 @@ object FrmCliente: TFrmCliente
     Left = 96
     Top = 248
   end
-  object QCadastro: TIBQuery
-    Database = DataModule1.IBDatabase1
-    Transaction = DataModule1.IBTransaction1
-    BufferChunks = 1000
-    CachedUpdates = False
-    ParamCheck = True
-    Left = 195
-    Top = 330
-  end
   object PopupMenu1: TPopupMenu
-    Left = 368
-    Top = 320
+    Left = 232
+    Top = 249
     object excluir1: TMenuItem
       Caption = 'excluir'
       OnClick = excluir1Click

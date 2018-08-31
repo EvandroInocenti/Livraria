@@ -3,6 +3,6 @@ unit Constantes;
 interface
 
 const
-  DIRETORIO_DB = 'D:\code\Livraria\Dados\LIVRARIA.FDB';
+  DIRETORIO_DB = 'E:\CURSOS\Delphi\Dados\LIVRARIA.FDB';
 
 implementation end.

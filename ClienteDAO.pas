@@ -15,12 +15,14 @@ type
       class procedure ConsultaClientes(conexao: TIBDatabase; _AQuery: TIBQuery);
       class procedure CadastrarCliente(conexao: TIBTransaction; _AQuery: TIBQuery; _ACliente: TCliente);
       class procedure AtualizarCliente(conexao: TIBTransaction; _AQuery: TIBQuery; _ACliente: TCliente);
-      class procedure ExcluirCliente(conexao: TIBTransaction; _AQuery: TIBQuery; _ACliente: TCliente);
+      class procedure ExcluirCliente(conexao: TIBDatabase; _AQuery: TIBQuery; _ACodigo: Integer);
 end;
 
 implementation
 
 { TFrmCliente }
+
+uses CadCliente;
 
 class procedure TClienteDAO.CadastrarCliente(conexao: TIBTransaction;
   _AQuery: TIBQuery; _ACliente: TCliente);
@@ -31,7 +33,7 @@ begin
     with _AQuery do begin
       Close;
       SQL.Clear;
-      SQL.Add('INSERT INTO CLIENTES(NOME)');
+      SQL.Add('INSERT INTO CLIENTE(NOME)');
       SQL.Add('VALUES(:xnome)');
       ParamByName('xnome').AsString := AnsiUpperCase(_ACliente.Nome);
       ExecSQL;
@@ -54,7 +56,7 @@ begin
     with _AQuery do begin
       Close;
       SQL.Clear;
-      SQL.Add('UPDATE CLIENTES SET nome = :xnome where codigo = :xcodigo');
+      SQL.Add('UPDATE CLIENTE SET nome = :xnome where codigo = :xcodigo');
       ParamByName('xcodigo').AsString := IntToStr(_ACliente.Codigo);
       ParamByName('xnome').AsString := AnsiUpperCase(_ACliente.Nome);
       ExecSQL;
@@ -74,7 +76,7 @@ begin
   with _AQuery do begin
     Close;
     SQL.Clear;
-    SQL.Add('SELECT * FROM CLIENTES');
+    SQL.Add('SELECT * FROM CLIENTE');
     case _AIndice of
       0: begin
            SQL.Add('WHERE codigo = :xcodigo');
@@ -94,24 +96,25 @@ begin
   with _AQuery do begin
     Close;
     Sql.Clear;
-    Sql.Add('SELECT * FROM CLIENTES');
+    Sql.Add('SELECT * FROM CLIENTE');
     Open;
   end;
 end;
-class procedure TClienteDAO.ExcluirCliente(conexao: TIBTransaction;
-  _AQuery: TIBQuery; _ACliente: TCliente);
+class procedure TClienteDAO.ExcluirCliente(conexao: TIBDatabase;
+  _AQuery: TIBQuery; _ACodigo: Integer);
 begin
   try
     with _AQuery do begin
       close;
       SQL.Clear;
-      SQL.Add('DELET FROM CLIENTES WHERE codigo = :=xCodigo');
-      ParamByName('xcodigo').AsString := IntToStr(_ACliente.Codigo);
-      conexao.CommitRetaining;
+      SQL.Add('DELETE FROM CLIENTE WHERE codigo = :xCodigo');
+      ParamByName('xcodigo').AsInteger := _ACodigo;
+      ExecSQL;
+      conexao.DefaultTransaction.CommitRetaining;
     end;
   Except
     on e: Exception do begin
-      conexao.RollbackRetaining;
+      conexao.DefaultTransaction.RollbackRetaining;
       ShowMessage('Não foi possível excluir o cliente.');
     end;
   end;

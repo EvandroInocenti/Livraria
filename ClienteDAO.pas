@@ -14,12 +14,15 @@ type
       class procedure ConsultaCliente(conexao : TIBDatabase; _Aquery : TIBQuery; _AIndice : Integer; _AStr : string);
       class procedure ConsultaClientes(conexao: TIBDatabase; _AQuery: TIBQuery);
       class procedure CadastrarCliente(conexao: TIBTransaction; _AQuery: TIBQuery; _ACliente: TCliente);
-      class procedure AtualizarCliente(conexao: TIBDatabase; _AQuery: TIBQuery; _ACliente: TCliente);
+      class procedure AtualizarCliente(conexao: TIBTransaction; _AQuery: TIBQuery; _ACliente: TCliente);
+      class procedure ExcluirCliente(conexao: TIBDatabase; _AQuery: TIBQuery; _ACodigo: Integer);
 end;
 
 implementation
 
 { TFrmCliente }
+
+uses CadCliente;
 
 class procedure TClienteDAO.CadastrarCliente(conexao: TIBTransaction;
   _AQuery: TIBQuery; _ACliente: TCliente);
@@ -30,7 +33,7 @@ begin
     with _AQuery do begin
       Close;
       SQL.Clear;
-      SQL.Add('INSERT INTO CLIENTES(NOME)');
+      SQL.Add('INSERT INTO CLIENTE(NOME)');
       SQL.Add('VALUES(:xnome)');
       ParamByName('xnome').AsString := AnsiUpperCase(_ACliente.Nome);
       ExecSQL;
@@ -44,26 +47,24 @@ begin
   end;
 end;
 
-class procedure TClienteDAO.AtualizarCliente(conexao: TIBDatabase;
+class procedure TClienteDAO.AtualizarCliente(conexao: TIBTransaction;
   _AQuery: TIBQuery; _ACliente: TCliente);
 var
   AQuery : TIBQuery;
 begin
    try
-    //AQuery := TIBQuery.Create(nil);
-
     with _AQuery do begin
       Close;
       SQL.Clear;
-      SQL.Add('UPDATE CLIENTE SET nome = :xnome where chave = :xchave');
-      ParamByName('xchave').AsString := IntToStr(_ACliente.Chave);
-      ParamByName('xnome').AsString := _ACliente.Nome;
+      SQL.Add('UPDATE CLIENTE SET nome = :xnome where codigo = :xcodigo');
+      ParamByName('xcodigo').AsString := IntToStr(_ACliente.Codigo);
+      ParamByName('xnome').AsString := AnsiUpperCase(_ACliente.Nome);
       ExecSQL;
-      conexao.DefaultTransaction.CommitRetaining;
+      conexao.CommitRetaining;
     end;
   except
     on e: Exception do begin
-      conexao.DefaultTransaction.RollbackRetaining;
+      conexao.RollbackRetaining;
       ShowMessage('Não foi possível atualizar o cliente.');
     end;
   end;
@@ -72,10 +73,10 @@ end;
 class procedure TClienteDAO.ConsultaCliente(conexao: TIBDatabase; _Aquery: TIBQuery;
   _AIndice: Integer; _AStr: string);
 begin
-  with _Aquery do begin
+  with _AQuery do begin
     Close;
     SQL.Clear;
-    SQL.Add('SELECT * FROM CLIENTES');
+    SQL.Add('SELECT * FROM CLIENTE');
     case _AIndice of
       0: begin
            SQL.Add('WHERE chave = :xchave');
@@ -95,9 +96,30 @@ begin
   with _AQuery do begin
     Close;
     Sql.Clear;
-    Sql.Add('SELECT FIRST 10 * FROM CLIENTES ORDER BY 1 DESC');
+    Sql.Add('SELECT * FROM CLIENTE');
+    Sql.Add('SELECT FIRST 10 * FROM CLIENTE ORDER BY 1 DESC');
     Open;
     First;
   end;
 end;
+class procedure TClienteDAO.ExcluirCliente(conexao: TIBDatabase;
+  _AQuery: TIBQuery; _ACodigo: Integer);
+begin
+  try
+    with _AQuery do begin
+      close;
+      SQL.Clear;
+      SQL.Add('DELETE FROM CLIENTE WHERE codigo = :xCodigo');
+      ParamByName('xcodigo').AsInteger := _ACodigo;
+      ExecSQL;
+      conexao.DefaultTransaction.CommitRetaining;
+    end;
+  Except
+    on e: Exception do begin
+      conexao.DefaultTransaction.RollbackRetaining;
+      ShowMessage('Não foi possível excluir o cliente.');
+    end;
+  end;
+end;
+
 end.

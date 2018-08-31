@@ -9,11 +9,12 @@ uses
 type
   TClienteDAO = class(TPersistent)
     private
+      FConexao : TIBTransaction;
     published
       ///<summary>Consulta de clientes</summary>
       class procedure ConsultaCliente(conexao : TIBDatabase; _Aquery : TIBQuery; _AIndice : Integer; _AStr : string);
       class procedure ConsultaClientes(conexao: TIBDatabase; _AQuery: TIBQuery);
-      class procedure CadastrarCliente(conexao: TIBTransaction; _AQuery: TIBQuery; _ACliente: TCliente);
+      class procedure CadastrarCliente(_ACliente: TCliente);
       class procedure AtualizarCliente(conexao: TIBTransaction; _AQuery: TIBQuery; _ACliente: TCliente);
       class procedure ExcluirCliente(conexao: TIBDatabase; _AQuery: TIBQuery; _ACodigo: Integer);
 end;
@@ -22,15 +23,16 @@ implementation
 
 { TFrmCliente }
 
-uses CadCliente;
+uses CadCliente, dmdados;
 
-class procedure TClienteDAO.CadastrarCliente(conexao: TIBTransaction;
-  _AQuery: TIBQuery; _ACliente: TCliente);
+class procedure TClienteDAO.CadastrarCliente(_ACliente: TCliente);
 var
   AQuery : TIBQuery;
 begin
+  try
    try
-    with _AQuery do begin
+    AQuery := TIBQuery.Create(DataModule1.IBDatabase1);
+    with AQuery do begin
       Close;
       SQL.Clear;
       SQL.Add('INSERT INTO CLIENTE(NOME)');
@@ -38,12 +40,15 @@ begin
       ParamByName('xnome').AsString := AnsiUpperCase(_ACliente.Nome);
       ExecSQL;
     end;
-    conexao.CommitRetaining;
+    DataModule1.IBTransaction1.CommitRetaining;
     except
-    on e: Exception do begin
-      conexao.RollbackRetaining;
-      ShowMessage('Não possível salvar o registro.');
-    end;
+      on e: Exception do begin
+        DataModule1.IBTransaction1.RollbackRetaining;
+        ShowMessage('Não possível salvar o registro.');
+      end;
+  end;
+  finally
+    AQuery.Free;
   end;
 end;
 
@@ -96,12 +101,12 @@ begin
   with _AQuery do begin
     Close;
     Sql.Clear;
-    Sql.Add('SELECT * FROM CLIENTE');
     Sql.Add('SELECT FIRST 10 * FROM CLIENTE ORDER BY 1 DESC');
     Open;
     First;
   end;
 end;
+
 class procedure TClienteDAO.ExcluirCliente(conexao: TIBDatabase;
   _AQuery: TIBQuery; _ACodigo: Integer);
 begin

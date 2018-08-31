@@ -26,10 +26,12 @@ type
     procedure DBGrid1DblClick(Sender: TObject);
 //    procedure btnLimparClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
-    procedure Consultar;
 //    procedure Cadastrar;
     function ValidarNome: Boolean;
+  public
+    procedure Consultar;
   end;
 
 var
@@ -93,9 +95,14 @@ begin
   BtnBuscarClick(self);
 end;
 
-procedure TFrmCliente.FormShow(Sender: TObject);
+procedure TFrmCliente.FormActivate(Sender: TObject);
 begin
   Consultar;
+end;
+
+procedure TFrmCliente.FormShow(Sender: TObject);
+begin
+//  Consultar;
 end;
 
 function TFrmCliente.ValidarNome: Boolean;

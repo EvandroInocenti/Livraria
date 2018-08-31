@@ -4,8 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB,
-  IBX.IBCustomDataSet, IBX.IBQuery;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Validador,
+  IBX.IBCustomDataSet, IBX.IBQuery, model.Cliente, System.Generics.Collections;
 
 type
   TFrmCadCliente = class(TForm)
@@ -35,6 +35,7 @@ type
     procedure Consultar;
     procedure Cadastrar;
     function ValidarNome: Boolean;
+    function Atribuir: TCliente;
   public
     procedure editarCliente(_ANome: string; _ATag: Integer);
   end;
@@ -50,7 +51,18 @@ implementation
 
 {$R *.dfm}
 
-uses dmdados, ClienteDAO;
+uses dmdados, ClienteDAO, Clientes;
+
+function TFrmCadCliente.Atribuir: TCliente;
+var
+  ACliente : TCliente;
+begin
+  ACliente := TCliente.Create;
+  with Acliente do begin
+    Nome := EdNome.Text;
+  end;
+  Result := ACliente;
+end;
 
 procedure TFrmCadCliente.btnCadastrarClick(Sender: TObject);
 begin
@@ -101,19 +113,24 @@ end;
 procedure TFrmCadCliente.Cadastrar;
 var
   ACadCliente : TFrmCadCliente;
+  ACliente : TCliente;
+  ACadastrou : Boolean;
 begin
   if ValidarNome then begin
-    ACadCliente := TFrmCadCliente.Create(Application);
-//    TClienteDAO.CadastrarCliente(DataModule1.IBTransaction1, QCadastro, ACadCliente);
-//    ACadCliente.Cadastrar;
-    Limpar;
-    Consultar;
+    ACliente := Atribuir;
+    ACadastrou := ACliente.Cadastrar;
+    if ACadastrou then begin
+      Limpar;
+      Self.Close;
+      Exit;
+    end;
+    ShowMessage('Ocorreu um erro');
   end;
 end;
 
 procedure TFrmCadCliente.Consultar;
 begin
-
+  FrmCliente.Consultar;
 end;
 
 procedure TFrmCadCliente.editarCliente(_ANome: string; _ATag: Integer);
@@ -131,8 +148,18 @@ begin
 end;
 
 function TFrmCadCliente.ValidarNome: Boolean;
+var
+  AEdit : TEdit;
+  Alista: TList<tEdit>;
+  i: integer;
 begin
-  result := (EdNome.Text <> EmptyStr);
+  Alista := Tlist<TEdit>.Create;
+  Alista.Add(edNome);
+  i := 0;
+  for AEdit in ALista do begin
+    if not Validador.ValidarCampoNulo(AEdit.Text) then i := i + 1;
+  end;
+  result := (i = 0);
 end;
 
 end.

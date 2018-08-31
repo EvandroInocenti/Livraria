@@ -10,8 +10,6 @@ Type
       FChave: Integer;
       FCodigo: Integer;
       FNome: String;
-    protected
-//      property Codigo: Integer read FCodigo write FCodigo;
     published
       property Nome: String read FNome write FNome;
       property Codigo: Integer read FCodigo write FCodigo;
@@ -19,7 +17,6 @@ Type
       function Cadastrar: Boolean;
       ///<summary>Atualiza um cliente novo</summary>
       function Atualizar: Boolean;
-      constructor Create(_ANome: String);
   End;
 
 implementation
@@ -34,14 +31,14 @@ begin
 end;
 
 function TCliente.Cadastrar: Boolean;
-var
-  cliDao : TClienteDAO;
 begin
-  // Cadastro
+   try
+      TClienteDAO.CadastrarCliente(self);
+      Result := True;
+   except
+    on E: Exception do
+      Result := False;
+   end;
 end;
 
-constructor TCliente.Create(_ANome: String);
-begin
-  Nome := _ANome;
-end;
 end.

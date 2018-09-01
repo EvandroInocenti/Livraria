@@ -101,6 +101,10 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
+        <DCCReference Include="src\telas\Principal.pas">
+            <Form>FrmPrincipal</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <DCCReference Include="dmdados.pas">
             <Form>DataModule1</Form>
             <FormType>dfm</FormType>
@@ -108,10 +112,6 @@
         </DCCReference>
         <DCCReference Include="Validador.pas"/>
         <DCCReference Include="ClienteDAO.pas"/>
-        <DCCReference Include="models\model.Cliente.pas"/>
-        <DCCReference Include="models\model.Livro.pas">
-            <Form>$R *.res</Form>
-        </DCCReference>
         <DCCReference Include="config\Constantes.pas"/>
         <DCCReference Include="src\telas\Clientes.pas">
             <Form>FrmCliente</Form>
@@ -119,9 +119,12 @@
         <DCCReference Include="src\telas\Livro.pas">
             <Form>FrmLivro</Form>
         </DCCReference>
-        <DCCReference Include="src\telas\Principal.pas">
-            <Form>FrmPrincipal</Form>
+        <DCCReference Include="src\models\model.Cliente.pas"/>
+        <DCCReference Include="src\telas\CadCliente.pas">
+            <Form>FrmCadCliente</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\models\model.Livro.pas"/>
         <None Include="ModelSupport_Livraria\default.txaPackage"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

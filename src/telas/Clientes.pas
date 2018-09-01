@@ -12,46 +12,36 @@ type
     QConsulta: TIBQuery;
     DBGrid1: TDBGrid;
     DataSource1: TDataSource;
-    QCadastro: TIBQuery;
     GroupBox1: TGroupBox;
     RGBusca: TRadioGroup;
     Busca: TLabel;
     edBusca: TEdit;
     BtnBuscar: TButton;
-    GroupBox2: TGroupBox;
-    edCodigo: TEdit;
-    lblCodigo: TLabel;
-    edNome: TEdit;
-    lblNome: TLabel;
-    btnCadastrar: TButton;
     PopupMenu1: TPopupMenu;
     excluir1: TMenuItem;
-    eChave: TEdit;
-    btnLimpar: TButton;
+    btnNovo: TButton;
     procedure BtnBuscarClick(Sender: TObject);
-    procedure btnCadastrarClick(Sender: TObject);
+    procedure btnNovoClick(Sender: TObject);
     procedure excluir1Click(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
-    procedure btnLimparClick(Sender: TObject);
+//    procedure btnLimparClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
-    procedure Limpar;
-    procedure Consultar;
-    procedure Cadastrar;
+//    procedure Cadastrar;
     function ValidarNome: Boolean;
+  public
+    procedure Consultar;
   end;
 
 var
   FrmCliente: TFrmCliente;
 
-const
-  CADASTRAR_BUTTON_CAPTION = 'Cadastrar';
-  ATUALIZAR_BUTTON_CAPTION = 'Atualizar';
 implementation
 
 {$R *.dfm}
 
-uses dmdados, Validador, ClienteDAO, model.Cliente;
+uses dmdados, Validador, ClienteDAO, model.Cliente, cadCliente;
 
 procedure TFrmCliente.BtnBuscarClick(Sender: TObject);
 begin
@@ -71,65 +61,14 @@ begin
     TClienteDao.ConsultaCliente(DataModule1.IBDatabase1, QConsulta, RGBusca.ItemIndex, edBusca.Text);
 end;
 
-procedure TFrmCliente.btnCadastrarClick(Sender: TObject);
+procedure TFrmCliente.btnNovoClick(Sender: TObject);
 var
   AQuery : TIBQuery;
+  ACadCliente : TFrmCadCliente;
+
 begin
-  if btnCadastrar.Caption = CADASTRAR_BUTTON_CAPTION then Cadastrar;
-
-  if btnCadastrar.Caption = ATUALIZAR_BUTTON_CAPTION then begin
-    if edNome.Text = EmptyStr then begin
-      Show
-    end;
-  end;
-
-  if eChave.Text = EmptyStr then begin
-    AQuery := TIBQuery.Create(nil);
-    try
-      With AQuery do begin
-        Close;
-        SQL.Clear;
-        Database := DataModule1.IBDatabase1;
-        sql.Add('select coalesce(max(codigo),0)+1 as maxCodigo from clientes');
-        Open;
-      end;
-
-      with QCadastro do begin
-        Close;
-        SQL.Clear;
-        SQL.Add('INSERT INTO CLIENTES(CODIGO, NOME)');
-        SQL.Add('VALUES(:xcodigo, :xnome)');
-        ParamByName('xcodigo').AsInteger := AQuery.FieldByName('maxCodigo').AsInteger;
-        ParamByName('xnome').AsString := AnsiUpperCase(edNome.Text);
-        ExecSQL;
-        DataModule1.IBTransaction1.CommitRetaining;
-      end;
-      edCodigo.Text := '';
-      edNome.Text := '';
-    finally
-      FreeAndNil(AQuery);
-    end;
-  end else begin
-
-  end;
-end;
-
-procedure TFrmCliente.btnLimparClick(Sender: TObject);
-begin
-  Limpar;
-end;
-
-procedure TFrmCliente.Cadastrar;
-var
-  ACliente : TCliente;
-begin
-  if ValidarNome then begin
-    ACliente := TCliente.Create(edNome.Text);
-    TClienteDAO.CadastrarCliente(DataModule1.IBTransaction1, QCadastro, ACliente);
-    ACliente.Cadastrar;
-    Limpar;
-    Consultar;
-  end;
+  ACadCliente := TFrmCadCliente.Create(nil);
+  ACadCliente.ShowModal;
 end;
 
 procedure TFrmCliente.Consultar;
@@ -138,50 +77,42 @@ begin
 end;
 
 procedure TFrmCliente.DBGrid1DblClick(Sender: TObject);
+var
+  ACadCliente : TFrmCadCliente;
 begin
   if (QConsulta.Active) and (not QConsulta.IsEmpty) then begin
-    eChave.Text := QConsulta.FieldByName('chave').Text;
-    edCodigo.Text := QConsulta.FieldByName('codigo').Text;
-    btnCadastrar.Caption := ATUALIZAR_BUTTON_CAPTION;
-    edNome.Text := QConsulta.FieldByName('nome').Text;
-    btnLimpar.Enabled := True;
+    ACadCliente := TFrmCadCliente.Create(nil);
+    ACadCliente.editarCliente(QConsulta.FieldByName('nome').asString, QConsulta.FieldByName('codigo').AsInteger);
   end;
 end;
 
 procedure TFrmCliente.excluir1Click(Sender: TObject);
+var
+  ACadCliDao : TClienteDAO;
 begin
-  With QCadastro do begin
-    Close;
-    SQL.Clear;
-    SQL.Add('delete from clientes where chave = :xchave');
-    ParamByName('xchave').AsInteger := QConsulta.FieldByName('chave').AsInteger;
-    ExecSQL;
-    DataModule1.IBTransaction1.CommitRetaining;
-  end;
+  ACadCliDao := TClienteDAO.Create;
+  ACadCliDao.ExcluirCliente(dmdados.DataModule1.IBDatabase1, QConsulta, QConsulta.FieldByName('codigo').AsInteger);
   BtnBuscarClick(self);
 end;
 
-procedure TFrmCliente.FormShow(Sender: TObject);
+procedure TFrmCliente.FormActivate(Sender: TObject);
 begin
   Consultar;
 end;
 
-procedure TFrmCliente.Limpar;
+procedure TFrmCliente.FormShow(Sender: TObject);
 begin
-  edCodigo.Text := EmptyStr;
-  edNome.Text := EmptyStr;
-  btnCadastrar.Caption := CADASTRAR_BUTTON_CAPTION;
-  btnLimpar.Enabled := false;
+//  Consultar;
 end;
 
 function TFrmCliente.ValidarNome: Boolean;
 begin
-  if edNome.Text = EmptyStr then begin
-    ShowMessage('Informe um nome.');
-    edNome.SetFocus;
+//  if edNome.Text = EmptyStr then begin
+//    ShowMessage('Informe um nome.');
+//    edNome.SetFocus;
     Result := False;
     Exit;
-  end;
+//  end;
   Result := True;
 end;
 
